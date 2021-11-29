@@ -75,6 +75,9 @@ class DevShopDrupalContext extends RawDrupalContext {
             $drush_config = $this->drupalContext->getDrupalParameter('drush');
             $alias = ltrim($drush_config['alias'], '@');
 
+            $drupal_config = $this->drupalContext->getDrupalParameter('drupal');
+            $base_path = $drupal_config['drupal_root'];
+
             // If there is no drush alias in the behat yml config, don't do anything special, but do show a message.
             if (empty($alias)) {
               print "DevShopDrupalContext Warning: No drush alias found in behat yml config.";
@@ -139,7 +142,8 @@ class DevShopDrupalContext extends RawDrupalContext {
             else {
 
                 if ($wrote) {
-                    echo "Last Page Output: $base_url/$output_path \n";
+                    $url_path_to_files = str_replace($base_path, '', $output_path);
+                    echo "Last Page Output: $base_url/$url_path_to_files \n";
                 }
                 else {
                     throw new \Exception("Something failed when writing output to $base_url/$output_path ... \n");
